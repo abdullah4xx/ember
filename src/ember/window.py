@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import math
 
-from PySide6.QtCore import QEvent, QRect, Qt, QTimer
-from PySide6.QtGui import QMouseEvent, QPainter, QRegion, QTransform
+from PySide6.QtCore import QEvent, QPoint, QRect, Qt, QTimer
+from PySide6.QtGui import QColor, QMouseEvent, QPainter, QRegion, QTransform
 from PySide6.QtWidgets import QApplication, QWidget
 
 from .animation import AnimationState, CharacterAnimation
@@ -22,7 +22,7 @@ from .character import (
     transformed_bounds,
 )
 
-DISPLAY_SCALE = 0.85
+DISPLAY_SCALE = 0.70
 
 
 class CharacterWindow(QWidget):
@@ -46,6 +46,9 @@ class CharacterWindow(QWidget):
         self.animation = CharacterAnimation()
         self.renderer = CharacterRenderer()
         self._right_button_active = False
+        self._drag_origin: QPoint | None = None
+        self._window_origin: QPoint | None = None
+        self._drag_moved = False
         self._timer = QTimer(self)
         self._timer.setTimerType(Qt.TimerType.PreciseTimer)
         self._timer.setInterval(33)
@@ -56,16 +59,14 @@ class CharacterWindow(QWidget):
 
     def paintEvent(self, event: QEvent) -> None:
         painter = QPainter(self)
+        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_Source)
+        painter.fillRect(self.rect(), QColor(0, 0, 0, 0))
+        painter.setCompositionMode(
+            QPainter.CompositionMode.CompositionMode_SourceOver
+        )
         painter.scale(DISPLAY_SCALE, DISPLAY_SCALE)
         self.renderer.paint(painter, self.animation.pose())
         painter.end()
-
-    def mouseMoveEvent(self, event: QMouseEvent) -> None:
-        point = event.position()
-        x, y = point.x() / DISPLAY_SCALE, point.y() / DISPLAY_SCALE
-        if character_hit_test(x, y, self.animation.pose()):
-            self.animation.set_mouse_position(x, y)
-        super().mouseMoveEvent(event)
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
         point = event.position()
@@ -75,10 +76,40 @@ class CharacterWindow(QWidget):
                 self._right_button_active = True
                 self.animation.set_state(AnimationState.LISTENING)
             elif event.button() == Qt.MouseButton.LeftButton:
-                self.animation.set_state(AnimationState.HAPPY)
+                self._drag_origin = event.globalPosition().toPoint()
+                self._window_origin = self.pos()
+                self._drag_moved = False
         super().mousePressEvent(event)
 
+    def mouseMoveEvent(self, event: QMouseEvent) -> None:
+        if (
+            self._drag_origin is not None
+            and self._window_origin is not None
+            and event.buttons() & Qt.MouseButton.LeftButton
+        ):
+            global_position = event.globalPosition().toPoint()
+            offset = global_position - self._drag_origin
+            if offset.manhattanLength() >= QApplication.startDragDistance():
+                self._drag_moved = True
+                self.move(self._window_origin + offset)
+            event.accept()
+            return
+        point = event.position()
+        x, y = point.x() / DISPLAY_SCALE, point.y() / DISPLAY_SCALE
+        if character_hit_test(x, y, self.animation.pose()):
+            self.animation.set_mouse_position(x, y)
+        super().mouseMoveEvent(event)
+
     def mouseReleaseEvent(self, event: QMouseEvent) -> None:
+        if (
+            event.button() == Qt.MouseButton.LeftButton
+            and self._drag_origin is not None
+        ):
+            if not self._drag_moved:
+                self.animation.set_state(AnimationState.HAPPY)
+            self._drag_origin = None
+            self._window_origin = None
+            self._drag_moved = False
         if (
             event.button() == Qt.MouseButton.RightButton
             and self._right_button_active
