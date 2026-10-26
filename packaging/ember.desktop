@@ -3,7 +3,7 @@ Type=Application
 Name=Ember
 Comment=Your pixel-art desktop companion
 Comment[ar]=رفيقك البكسلي على سطح المكتب
-Exec=env QT_QPA_PLATFORM=xcb /home/abdullah/projects/ember/.venv/bin/ember
+Exec=/usr/bin/ember
 Icon=ember
 Terminal=false
 Categories=Utility;
