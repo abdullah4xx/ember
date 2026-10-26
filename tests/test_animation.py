@@ -54,8 +54,12 @@ def test_all_required_states_are_available() -> None:
         "listening",
         "thinking",
         "talking",
+        "typing",
         "pointing",
         "happy",
+        "landing",
+        "clinging",
+        "perching",
         "yawning",
         "sitting",
         "sleeping",
@@ -65,6 +69,17 @@ def test_all_required_states_are_available() -> None:
     }
 
     assert {state.value for state in AnimationState} == expected
+
+
+def test_typing_state_animates_arms() -> None:
+    animation = CharacterAnimation(random.Random(9))
+    animation.set_state(AnimationState.TYPING)
+
+    first = animation.update(0.02)
+    second = animation.update(0.08)
+
+    assert first.arm_left != second.arm_left
+    assert first.arm_right != second.arm_right
 
 
 def test_listening_gaze_tracks_mouse_within_limits() -> None:
@@ -78,6 +93,25 @@ def test_listening_gaze_tracks_mouse_within_limits() -> None:
     assert pose.gaze_y < 0
     assert abs(pose.gaze_x) <= 1
     assert abs(pose.gaze_y) <= 1
+
+
+def test_sitting_gaze_tracks_pointer_while_looking_toward_chat() -> None:
+    animation = CharacterAnimation(random.Random(2))
+    animation.set_state(AnimationState.SITTING)
+    animation.set_mouse_position(280, 190)
+
+    for _ in range(24):
+        pose = animation.update(0.05)
+
+    assert pose.gaze_x > 0.5
+    assert pose.gaze_y > 0.39
+
+    animation.set_mouse_position(100, 190)
+    for _ in range(24):
+        pose = animation.update(0.05)
+
+    assert pose.gaze_x < -0.5
+    assert pose.gaze_y > 0.39
 
 
 def test_sleeping_closes_eyes_and_lowers_character() -> None:
@@ -113,6 +147,49 @@ def test_landing_puff_fades_to_zero() -> None:
         pose = animation.update(0.05)
 
     assert pose.landing_amount == 0
+    assert animation.state is AnimationState.IDLE
+
+
+def test_petting_shows_bounded_affection_and_returns_to_idle() -> None:
+    animation = CharacterAnimation(random.Random(2))
+    animation.trigger_affection()
+    animation.celebrate()
+
+    pose = animation.update(0.05)
+
+    assert pose.affection_amount > 0
+    assert animation.state is AnimationState.HAPPY
+    for _ in range(30):
+        pose = animation.update(0.05)
+
+    assert pose.affection_amount == 0
+    assert animation.state is AnimationState.IDLE
+
+
+def test_clinging_raises_arms_and_landing_squashes_the_body() -> None:
+    animation = CharacterAnimation(random.Random(2))
+    animation.set_state(AnimationState.CLINGING)
+    cling_pose = animation.pose()
+    assert cling_pose.arm_left < -60
+    assert cling_pose.arm_right > 60
+
+    animation.trigger_landing()
+    landing_pose = animation.update(0.05)
+    assert animation.state is AnimationState.LANDING
+    assert landing_pose.landing_amount > 0
+    assert landing_pose.body_stretch < 0
+
+
+def test_perching_keeps_eyes_open_and_moves_legs_gently() -> None:
+    animation = CharacterAnimation(random.Random(2))
+    animation.set_state(AnimationState.PERCHING)
+    first = animation.update(0.05)
+    second = animation.update(0.15)
+
+    assert first.eye_opening == 1.0
+    assert not first.closed_eyes
+    assert first.leg_angles != second.leg_angles
+    assert abs(first.body_bob) < 1.0
 
 
 def test_voice_loudness_is_clamped() -> None:

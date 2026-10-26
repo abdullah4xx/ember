@@ -16,8 +16,12 @@ class AnimationState(str, Enum):
     LISTENING = "listening"
     THINKING = "thinking"
     TALKING = "talking"
+    TYPING = "typing"
     POINTING = "pointing"
     HAPPY = "happy"
+    LANDING = "landing"
+    CLINGING = "clinging"
+    PERCHING = "perching"
     YAWNING = "yawning"
     SITTING = "sitting"
     SLEEPING = "sleeping"
@@ -59,6 +63,7 @@ class Pose:
     gaze_x: float
     gaze_y: float
     closed_eyes: bool
+    eye_opening: float
     happy_eyes: bool
     thought_dots: int
     talking_bounce: float
@@ -67,6 +72,8 @@ class Pose:
     point_on_left: bool
     show_sleep_z: bool
     surprised: bool
+    affection_amount: float
+    mouth_opening: float
 
 
 class CharacterAnimation:
@@ -88,6 +95,9 @@ class CharacterAnimation:
         self.elapsed = 0.0
         self.state_elapsed = 0.0
         self.landing_remaining = 0.0
+        self.affection_remaining = 0.0
+        self._landing_return_state = AnimationState.IDLE
+        self._happy_return_state = AnimationState.IDLE
         self._blink_remaining = 0.0
         self._double_blink_pending = False
         self._blink_wait = self.rng.uniform(2.0, 5.0)
@@ -96,14 +106,29 @@ class CharacterAnimation:
         new_state = AnimationState(state)
         if new_state is self.state:
             return
+        previous_state = self.state
         self.state = new_state
         self.state_elapsed = 0.0
+        if new_state is AnimationState.LANDING:
+            self._landing_return_state = previous_state
+        elif new_state is AnimationState.HAPPY:
+            self._happy_return_state = previous_state
         if new_state is AnimationState.SLEEPING:
             self.sleepiness = 1.0
         elif new_state in (AnimationState.SITTING, AnimationState.YAWNING):
             self.sleepiness = max(self.sleepiness, 0.65)
         else:
             self.sleepiness = 0.0
+
+    def celebrate(
+        self, return_state: AnimationState | None = None
+    ) -> None:
+        previous_state = self.state
+        self.set_state(AnimationState.HAPPY)
+        self._happy_return_state = return_state or previous_state
+
+    def trigger_affection(self) -> None:
+        self.affection_remaining = 1.15
 
     def set_facing(self, direction: int) -> None:
         if direction not in (-1, 1):
@@ -124,6 +149,7 @@ class CharacterAnimation:
 
     def trigger_landing(self) -> None:
         self.landing_remaining = 0.42
+        self.set_state(AnimationState.LANDING)
 
     def update(self, dt: float) -> Pose:
         if dt < 0:
@@ -132,6 +158,17 @@ class CharacterAnimation:
         self.elapsed += dt
         self.state_elapsed += dt
         self.landing_remaining = max(0.0, self.landing_remaining - dt)
+        self.affection_remaining = max(0.0, self.affection_remaining - dt)
+        if (
+            self.state is AnimationState.LANDING
+            and self.landing_remaining == 0.0
+        ):
+            self.set_state(self._landing_return_state)
+        elif (
+            self.state is AnimationState.HAPPY
+            and self.state_elapsed >= 1.25
+        ):
+            self.set_state(self._happy_return_state)
         self._update_blink(dt)
         self._update_targets()
         self.gaze_x.step(dt)
@@ -147,29 +184,41 @@ class CharacterAnimation:
         happy = self.state is AnimationState.HAPPY
         sleeping = self.state is AnimationState.SLEEPING
         sitting = self.state is AnimationState.SITTING
+        perching = self.state is AnimationState.PERCHING
         talking = self.state is AnimationState.TALKING
+        typing = self.state is AnimationState.TYPING
         yawning = self.state is AnimationState.YAWNING
+        landing = self.state is AnimationState.LANDING
 
         leg_angles = tuple(
             math.sin(walk_phase + (math.pi if index % 2 else 0.0)) * 28.0
             if walking
             else (
-                math.sin(walk_phase + (math.pi if index % 2 else 0.0))
-                * 7.0
-                * (1.0 - self.sleep.value)
-                if self.state
-                in (
-                    AnimationState.JUMPING,
-                    AnimationState.FALLING,
-                    AnimationState.HAPPY,
+                math.sin(self.elapsed * 1.9 + index * 0.55) * 4.0
+                if perching
+                else (
+                    math.sin(walk_phase + (math.pi if index % 2 else 0.0))
+                    * 7.0
+                    * (1.0 - self.sleep.value)
+                    if self.state
+                    in (
+                        AnimationState.JUMPING,
+                        AnimationState.FALLING,
+                        AnimationState.HAPPY,
+                        AnimationState.LANDING,
+                    )
+                    else 0.0
                 )
-                else 0.0
             )
             for index in range(4)
         )
         body_bob = (
             abs(math.sin(walk_phase * 2.0)) * 2.2 if walking else 0.0
         )
+        if not walking and not sleeping and not sitting and not perching:
+            body_bob += abs(math.sin(self.elapsed * 2.2)) * 1.1
+        if perching:
+            body_bob += math.sin(self.elapsed * 1.35) * 0.55
         if talking:
             body_bob += abs(math.sin(self.elapsed * 10.0)) * (
                 1.5 + self.voice_loudness * 4.0
@@ -194,13 +243,32 @@ class CharacterAnimation:
             landing_progress = 1.0 - self.landing_remaining / 0.42
             body_stretch -= 0.12 * math.sin(landing_progress * math.pi)
 
-        arm_swing = math.sin(walk_phase) * 12.0 if walking else 0.0
+        arm_swing = (
+            math.sin(walk_phase) * 12.0
+            if walking
+            else math.sin(self.elapsed * 1.5) * 1.3
+            if perching
+            else math.sin(self.elapsed * 2.6) * 2.5
+        )
         arm_left = -self.lean.value * 180.0 + arm_swing
         arm_right = self.lean.value * 180.0 - arm_swing
         if talking:
             swing = math.sin(self.elapsed * 10.0) * (9.0 + 12.0 * self.voice_loudness)
             arm_left += swing
             arm_right -= swing
+        if typing:
+            typing_swing = math.sin(self.elapsed * 24.0) * 7.0
+            arm_left = -18.0 + typing_swing
+            arm_right = 18.0 - typing_swing
+        if self.state is AnimationState.FALLING:
+            arm_left = -32.0
+            arm_right = 32.0
+        if landing:
+            arm_left = 38.0
+            arm_right = -38.0
+        if self.state is AnimationState.CLINGING:
+            arm_left = -70.0
+            arm_right = 70.0
         if yawning:
             arm_left += 42.0
             arm_right -= 42.0
@@ -230,18 +298,32 @@ class CharacterAnimation:
         if self.state is AnimationState.THINKING:
             thought_dots = 1 + int(self.elapsed * 2.8) % 3
 
-        eyes_closed = sleeping or self._blink_remaining > 0
-        if self.state is AnimationState.SITTING and self.state_elapsed > 0.8:
-            eyes_closed = self._blink_remaining > 0 or self.state_elapsed > 1.2
+        eye_opening = (
+            0.0
+            if sleeping
+            else min(1.0, self.state_elapsed / 1.1)
+            if self.state is AnimationState.HANGING and self.state_elapsed < 1.1
+            else 0.0
+            if self._blink_remaining > 0
+            else 1.0
+        )
+        eyes_closed = (
+            sleeping
+            or self._blink_remaining > 0
+            or (
+                self.state is AnimationState.HANGING
+                and eye_opening < 1.0
+            )
+        )
         return Pose(
             effect_phase=self.elapsed,
             body_y=body_y,
             body_bob=body_bob,
             body_stretch=body_stretch,
-            lean=self.lean.value + (
-                0.14 * self.facing
-                if self.state is AnimationState.CONFUSED
-                else 0.0
+            lean=(
+                self.lean.value
+                + (0.14 * self.facing if self.state is AnimationState.CONFUSED else 0.0)
+                + (0.055 * math.sin(self.elapsed * 1.3) if sleeping else 0.0)
             ),
             arm_left=arm_left,
             arm_right=arm_right,
@@ -249,6 +331,7 @@ class CharacterAnimation:
             gaze_x=self.gaze_x.value,
             gaze_y=self.gaze_y.value,
             closed_eyes=eyes_closed,
+            eye_opening=eye_opening,
             happy_eyes=happy,
             thought_dots=thought_dots,
             talking_bounce=self.voice_loudness if talking else 0.0,
@@ -257,11 +340,17 @@ class CharacterAnimation:
             point_on_left=point_on_left,
             show_sleep_z=sleeping,
             surprised=self.state is AnimationState.SURPRISED,
+            affection_amount=min(1.0, self.affection_remaining / 1.15),
+            mouth_opening=(
+                max(0.0, math.sin(self.elapsed * 13.0))
+                if talking
+                else 0.0
+            ),
         )
 
     def _update_targets(self) -> None:
         self.lean.target = (
-            0.13 * self.facing
+            0.12 * self.facing
             if self.state is AnimationState.WALKING
             else 0.0
         )
@@ -281,9 +370,30 @@ class CharacterAnimation:
             self.hop.target = 0.0
 
         gaze_x = gaze_y = 0.0
-        if self.state is AnimationState.LISTENING and self.mouse_position:
-            gaze_x = min(1.0, max(-1.0, (self.mouse_position[0] - 190.0) / 100.0))
-            gaze_y = min(1.0, max(-1.0, (self.mouse_position[1] - 156.0) / 80.0))
+        if self.state is AnimationState.PERCHING:
+            gaze_y = 0.42
+        elif self.state is AnimationState.SITTING:
+            gaze_y = 0.65
+            if self.mouse_position is not None:
+                gaze_x = min(
+                    0.9,
+                    max(-0.9, (self.mouse_position[0] - 190.0) / 90.0),
+                )
+                gaze_y = max(
+                    0.4,
+                    min(
+                        0.9,
+                        (self.mouse_position[1] - 156.0) / 90.0,
+                    ),
+                )
+        elif self.mouse_position and self.state not in (
+            AnimationState.SLEEPING,
+            AnimationState.THINKING,
+            AnimationState.CONFUSED,
+            AnimationState.SURPRISED,
+        ):
+            gaze_x = min(0.9, max(-0.9, (self.mouse_position[0] - 190.0) / 90.0))
+            gaze_y = min(0.9, max(-0.9, (self.mouse_position[1] - 156.0) / 70.0))
         elif self.state is AnimationState.THINKING:
             gaze_y = -0.8
         elif self.state is AnimationState.CONFUSED:

@@ -1,3 +1,6 @@
+from PySide6.QtGui import QImage, QPainter
+
+from ember.animation import CharacterAnimation
 from ember.character import (
     BODY_COLOR,
     BODY_RECT,
@@ -7,6 +10,7 @@ from ember.character import (
     GROUND_Y,
     LEG_COLOR,
     LEG_RECTS,
+    CharacterRenderer,
     character_hit_test,
 )
 
@@ -39,3 +43,32 @@ def test_hit_test_includes_character_and_excludes_empty_canvas() -> None:
     assert character_hit_test(140, 200)
     assert not character_hit_test(20, 20)
     assert not character_hit_test(190, 220)
+
+
+def test_sleep_marks_float_and_fade_over_time(qapp) -> None:
+    rendered = []
+    for phase in (0.0, 1.0):
+        image = QImage(380, 250, QImage.Format.Format_ARGB32)
+        image.fill(0)
+        painter = QPainter(image)
+        CharacterRenderer.draw_sleep_marks(painter, phase)
+        painter.end()
+        rendered.append(image)
+
+    assert rendered[0] != rendered[1]
+
+
+def test_laptop_is_only_painted_when_requested(qapp) -> None:
+    renderer = CharacterRenderer()
+    pose = CharacterAnimation().pose()
+    images = []
+
+    for show_laptop in (False, True):
+        image = QImage(380, 250, QImage.Format.Format_ARGB32)
+        image.fill(0)
+        painter = QPainter(image)
+        renderer.paint(painter, pose, show_laptop=show_laptop)
+        painter.end()
+        images.append(image)
+
+    assert images[0] != images[1]

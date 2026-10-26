@@ -4,17 +4,26 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ember-companion"
-version = "0.1.0"
+version = "1.1.0"
 description = "A small animated desktop companion for Linux"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = ["PySide6-Essentials>=6.8"]
+dependencies = [
+    "PySide6-Essentials>=6.8",
+    "PySide6-Addons>=6.8",
+    "google-genai>=2.25",
+    "keyring>=25",
+    "vosk>=0.3.45",
+]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
 
 [project.scripts]
 ember = "ember.__main__:main"
+
+[tool.setuptools.package-data]
+ember = ["assets/*.ttf", "assets/*.wav"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

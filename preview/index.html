@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="An interactive visual settings preview for Ember, your desktop companion."
+    />
+    <title>Ember — Your desktop companion</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" data-home data-i18n-aria="backToEmber" aria-label="Ember home">
+          <svg class="brand-mark" viewBox="96 95 190 125" aria-hidden="true" focusable="false">
+            <rect class="brand-shadow" x="122" y="207" width="136" height="7" />
+            <rect class="brand-leg" x="134" y="182" width="16" height="32" />
+            <rect class="brand-leg" x="166" y="182" width="16" height="32" />
+            <rect class="brand-leg" x="198" y="182" width="16" height="32" />
+            <rect class="brand-leg" x="230" y="182" width="16" height="32" />
+            <rect class="brand-body" x="104" y="130" width="28" height="22" />
+            <rect class="brand-body" x="248" y="130" width="28" height="22" />
+            <rect class="brand-body" x="130" y="100" width="120" height="86" />
+            <rect class="brand-eye" x="155" y="142" width="14" height="28" />
+            <rect class="brand-eye" x="211" y="142" width="14" height="28" />
+          </svg>
+          <span class="brand-name">ember</span>
+          <span class="brand-divider"></span>
+          <span class="brand-caption" data-i18n="companion">desktop companion</span>
+        </a>
+        <div class="topbar-tools">
+          <span class="preview-badge"><span></span><span data-i18n="previewMode">PREVIEW MODE</span></span>
+          <label class="language-control" data-i18n-title="interfaceLanguage">
+            <span class="sr-only" data-i18n="interfaceLanguage">Interface language</span>
+            <span class="language-symbol" aria-hidden="true">文</span>
+            <select id="language-select" data-i18n-aria="interfaceLanguage" aria-label="Interface language">
+              <option value="en">English</option>
+              <option value="ar">العربية</option>
+            </select>
+          </label>
+          <button class="icon-button close-button" type="button" data-i18n-aria="closePreview" aria-label="Close preview" title="Close preview">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section class="home-view" id="home-view" aria-labelledby="home-title">
+          <div class="home-intro">
+            <div class="intro-copy">
+              <span class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="personalize">MAKE IT YOURS</span></span>
+              <h1 id="home-title" data-i18n="homeTitle">A little more <em>you.</em></h1>
+              <p data-i18n="homeDescription">Choose a part of Ember to shape how your desktop companion works.</p>
+            </div>
+            <div class="awake-chip">
+              <span class="awake-dot"></span>
+              <span>
+                <strong data-i18n="awake">Ember is awake</strong>
+                <small data-i18n="readyToTune">Ready for a little tuning</small>
+              </span>
+              <span class="awake-spark" aria-hidden="true">✳</span>
+            </div>
+          </div>
+
+          <div class="orbit-stage" id="orbit-stage">
+            <div class="stage-ornament ornament-a" aria-hidden="true"></div>
+            <div class="stage-ornament ornament-b" aria-hidden="true"></div>
+            <div class="stage-label stage-label-left">
+              <span class="stage-label-index">01</span>
+              <span data-i18n="choosePath">CHOOSE YOUR PATH</span>
+            </div>
+            <div class="stage-label stage-label-right">
+              <span class="stage-label-live"><i></i><span data-i18n="livePreview">LIVE PREVIEW</span></span>
+            </div>
+            <svg class="orbit-lines" viewBox="0 0 1100 570" preserveAspectRatio="none" aria-hidden="true">
+              <path data-connector="api" />
+              <path data-connector="voice" />
+              <path data-connector="shortcuts" />
+              <path data-connector="behavior" />
+              <path data-connector="safety" />
+              <circle data-connector-dot="api" r="3" />
+              <circle data-connector-dot="voice" r="3" />
+              <circle data-connector-dot="shortcuts" r="3" />
+              <circle data-connector-dot="behavior" r="3" />
+              <circle data-connector-dot="safety" r="3" />
+            </svg>
+
+            <button class="orbit-link orbit-gemini" type="button" data-page="api">
+              <span class="orbit-index">01</span>
+              <span class="orbit-copy"><strong data-i18n="gemini">Gemini & API</strong><small data-i18n="geminiSub">Give Ember a voice</small></span>
+              <span class="orbit-arrow" aria-hidden="true">↗</span>
+            </button>
+            <button class="orbit-link orbit-voice" type="button" data-page="voice">
+              <span class="orbit-index">02</span>
+              <span class="orbit-copy"><strong data-i18n="voice">Voice & language</strong><small data-i18n="voiceSub">Listen, speak, connect</small></span>
+              <span class="orbit-arrow" aria-hidden="true">↗</span>
+            </button>
+            <button class="orbit-link orbit-shortcuts" type="button" data-page="shortcuts">
+              <span class="orbit-index">05</span>
+              <span class="orbit-copy"><strong data-i18n="shortcuts">Shortcuts & startup</strong><small data-i18n="shortcutsSub">Always within reach</small></span>
+              <span class="orbit-arrow" aria-hidden="true">↗</span>
+            </button>
+            <button class="orbit-link orbit-behavior" type="button" data-page="behavior">
+              <span class="orbit-index">03</span>
+              <span class="orbit-copy"><strong data-i18n="behavior">Movement & rest</strong><small data-i18n="behaviorSub">A little desktop life</small></span>
+              <span class="orbit-arrow" aria-hidden="true">↗</span>
+            </button>
+            <button class="orbit-link orbit-safety" type="button" data-page="safety">
+              <span class="orbit-index">04</span>
+              <span class="orbit-copy"><strong data-i18n="safety">Permissions & safety</strong><small data-i18n="safetySub">You stay in control</small></span>
+              <span class="orbit-arrow" aria-hidden="true">↗</span>
+            </button>
+
+            <div class="character-wrap" id="character-wrap" tabindex="0" data-i18n-aria="emberCharacter" aria-label="Ember">
+              <svg class="ember-character" viewBox="0 0 380 250" role="img" aria-labelledby="ember-title ember-desc">
+                <title id="ember-title">Ember, a small orange desktop companion</title>
+                <desc id="ember-desc">A friendly pixel-art character with a rectangular orange body, four legs, two arms, and two dark eyes.</desc>
+                <g class="character-idle">
+                  <g class="character-shadow">
+                    <rect x="122" y="207" width="136" height="7" />
+                    <rect x="132" y="204" width="116" height="3" />
+                  </g>
+                  <g class="character-legs">
+                    <rect x="134" y="182" width="16" height="32" />
+                    <rect x="166" y="182" width="16" height="32" />
+                    <rect x="198" y="182" width="16" height="32" />
+                    <rect x="230" y="182" width="16" height="32" />
+                  </g>
+                  <g class="character-arms">
+                    <rect x="104" y="130" width="28" height="22" />
+                    <rect x="248" y="130" width="28" height="22" />
+                  </g>
+                  <rect class="character-body" x="130" y="100" width="120" height="86" />
+                  <g class="character-eyes">
+                    <rect x="155" y="142" width="14" height="28" />
+                    <rect x="211" y="142" width="14" height="28" />
+                  </g>
+                </g>
+                <a class="part-hit" href="#api" data-page="api" data-i18n-aria="gemini" aria-label="Gemini and API settings">
+                  <title>Gemini & API</title><rect x="151" y="91" width="78" height="58" rx="10" />
+                </a>
+                <a class="part-hit" href="#voice" data-page="voice" data-i18n-aria="voice" aria-label="Voice and language settings">
+                  <title>Voice & language</title><rect x="92" y="119" width="54" height="48" rx="10" />
+                </a>
+                <a class="part-hit" href="#shortcuts" data-page="shortcuts" data-i18n-aria="shortcuts" aria-label="Shortcuts and startup settings">
+                  <title>Shortcuts & startup</title><rect x="234" y="119" width="54" height="48" rx="10" />
+                </a>
+                <a class="part-hit" href="#behavior" data-page="behavior" data-i18n-aria="behavior" aria-label="Movement and rest settings">
+                  <title>Movement & rest</title><rect x="124" y="175" width="64" height="46" rx="10" />
+                </a>
+                <a class="part-hit" href="#safety" data-page="safety" data-i18n-aria="safety" aria-label="Permissions and safety settings">
+                  <title>Permissions & safety</title><rect x="192" y="175" width="64" height="46" rx="10" />
+                </a>
+              </svg>
+              <div class="character-plinth">
+                <span data-i18n="emberPixelPal">YOUR PIXEL PAL</span>
+                <span class="plinth-rule"></span>
+                <span>v 0.1 <b>•</b> <span data-i18n="desktop">DESKTOP</span></span>
+              </div>
+            </div>
+
+            <div class="stage-note stage-note-left">
+              <span class="note-spark" aria-hidden="true">✳</span>
+              <span data-i18n="hoverHint">Hover over Ember to see what each part can do.</span>
+            </div>
+            <div class="stage-note stage-note-right">
+              <span class="note-avatars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span data-i18n="yourDesktop">MADE FOR YOUR DESKTOP</span>
+            </div>
+          </div>
+
+          <footer class="home-footer">
+            <span class="footer-note"><span class="footer-signal"></span><span data-i18n="previewDisclaimer">Interactive concept · Changes stay in this browser preview</span></span>
+            <button class="text-button" type="button" data-reset data-i18n="resetPreview">Reset preview</button>
+          </footer>
+        </section>
+
+        <section class="settings-view" id="settings-view" hidden aria-labelledby="section-title">
+          <aside class="settings-rail">
+            <button class="avatar-back" type="button" data-home data-i18n-aria="backToEmber" aria-label="Return to Ember">
+              <span class="avatar-ring">
+                <svg viewBox="96 95 190 125" aria-hidden="true">
+                  <rect fill="#C15F3C" x="134" y="182" width="16" height="32" />
+                  <rect fill="#C15F3C" x="166" y="182" width="16" height="32" />
+                  <rect fill="#C15F3C" x="198" y="182" width="16" height="32" />
+                  <rect fill="#C15F3C" x="230" y="182" width="16" height="32" />
+                  <rect fill="#DA7756" x="104" y="130" width="28" height="22" />
+                  <rect fill="#DA7756" x="248" y="130" width="28" height="22" />
+                  <rect fill="#DA7756" x="130" y="100" width="120" height="86" />
+                  <rect fill="#17151F" x="155" y="142" width="14" height="28" />
+                  <rect fill="#17151F" x="211" y="142" width="14" height="28" />
+                </svg>
+              </span>
+              <span class="avatar-back-label" data-i18n="backToEmber">Back to Ember</span>
+            </button>
+            <div class="rail-caption"><span data-i18n="settings">SETTINGS</span><span class="rail-caption-line"></span></div>
+            <nav class="section-nav" aria-label="Settings sections">
+              <button type="button" data-page="api"><span class="nav-number">01</span><span data-i18n="gemini">Gemini & API</span><span class="nav-arrow">↗</span></button>
+              <button type="button" data-page="voice"><span class="nav-number">02</span><span data-i18n="voice">Voice & language</span><span class="nav-arrow">↗</span></button>
+              <button type="button" data-page="behavior"><span class="nav-number">03</span><span data-i18n="behavior">Movement & rest</span><span class="nav-arrow">↗</span></button>
+              <button type="button" data-page="safety"><span class="nav-number">04</span><span data-i18n="safety">Permissions & safety</span><span class="nav-arrow">↗</span></button>
+              <button type="button" data-page="shortcuts"><span class="nav-number">05</span><span data-i18n="shortcuts">Shortcuts & startup</span><span class="nav-arrow">↗</span></button>
+            </nav>
+            <div class="rail-bottom">
+              <span class="rail-dot"></span>
+              <span><strong data-i18n="localPreview">Local preview</strong><small data-i18n="nothingSent">Nothing is sent or saved to Ember.</small></span>
+            </div>
+          </aside>
+
+          <div class="settings-main">
+            <div class="settings-topline">
+              <div class="breadcrumbs"><span data-i18n="preferences">PREFERENCES</span><span>/</span><strong id="section-crumb">Gemini & API</strong></div>
+              <button class="quiet-button" type="button" data-reset data-i18n="resetDefaults">Reset defaults</button>
+            </div>
+            <div class="settings-content" id="settings-content"></div>
+            <footer class="settings-footer">
+              <span class="save-feedback" id="save-feedback" role="status" aria-live="polite"></span>
+              <span class="footer-note" data-i18n="previewOnly">Preview only — no settings are applied to the desktop app.</span>
+              <button class="save-button" type="button" id="save-button"><span data-i18n="saveChanges">Save changes</span><span aria-hidden="true">↗</span></button>
+            </footer>
+          </div>
+        </section>
+      </main>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
+    <div class="chat-scrim" id="chat-scrim" hidden></div>
+    <div class="character-bubble voice-composer" id="voice-composer" hidden>
+      <label class="voice-composer-title" for="voice-question" data-i18n="composerTitle">Ask Ember</label>
+      <textarea
+        class="voice-composer-input"
+        id="voice-question"
+        rows="2"
+        maxlength="1200"
+        data-i18n-placeholder="composerPlaceholder"
+        data-i18n-aria="composerTitle"
+        placeholder="Write a question…"
+        aria-label="Write a question for Ember"
+      ></textarea>
+      <div class="voice-composer-footer">
+        <p class="voice-composer-help" data-i18n="composerHelp">Click here to type · hold right-click on Ember to record</p>
+        <button class="composer-send" type="button" id="send-question" data-i18n-aria="sendQuestion" aria-label="Send question">
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M3 10h13M10 4l6 6-6 6" />
+          </svg>
+        </button>
+      </div>
+      <p class="voice-composer-privacy" data-i18n="microphonePrivacy">
+        Audio stays in this browser and is discarded. Nothing is sent to Gemini.
+      </p>
+      <p class="voice-composer-status" id="voice-status" role="status" aria-live="polite"></p>
+      <div class="voice-wave" id="voice-wave" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <i class="composer-tail" aria-hidden="true"></i>
+    </div>
+    <section
+      class="conversation-window"
+      id="conversation-window"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="conversation-title"
+      tabindex="-1"
+      hidden
+    >
+      <header class="conversation-header">
+        <button
+          class="conversation-return"
+          id="conversation-return"
+          type="button"
+          data-i18n-aria="returnEmber"
+          aria-label="Return Ember to the stage"
+          title="Return Ember to the stage"
+        >
+          <svg viewBox="96 95 190 125" aria-hidden="true" focusable="false">
+            <rect class="brand-leg" x="134" y="182" width="16" height="32" />
+            <rect class="brand-leg" x="166" y="182" width="16" height="32" />
+            <rect class="brand-leg" x="198" y="182" width="16" height="32" />
+            <rect class="brand-leg" x="230" y="182" width="16" height="32" />
+            <rect class="brand-body" x="104" y="130" width="28" height="22" />
+            <rect class="brand-body" x="248" y="130" width="28" height="22" />
+            <rect class="brand-body" x="130" y="100" width="120" height="86" />
+            <rect class="brand-eye" x="155" y="142" width="14" height="28" />
+            <rect class="brand-eye" x="211" y="142" width="14" height="28" />
+          </svg>
+        </button>
+        <div class="conversation-heading">
+          <h2 id="conversation-title" data-i18n="conversationTitle">A little chat</h2>
+          <p data-i18n="conversationSubtitle">Your question, then Ember's reply</p>
+        </div>
+        <span class="conversation-status" aria-hidden="true"></span>
+      </header>
+      <div class="conversation-notice" data-i18n="conversationPreviewNotice">
+        Preview reply only · Gemini is not connected
+      </div>
+      <ol class="conversation-messages" id="conversation-messages" aria-live="polite"></ol>
+    </section>
+    <div class="traveling-ember" id="traveling-ember" aria-hidden="true"></div>
+  </body>
+</html>

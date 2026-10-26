@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A visual preview of an Ember conversation on the Ubuntu desktop."
+    />
+    <title>Ubuntu desktop — Ember review</title>
+    <link rel="stylesheet" href="./desktop.css" />
+    <script src="./review.js" defer></script>
+  </head>
+  <body>
+    <main class="desktop" aria-label="Ubuntu desktop">
+      <header class="system-panel" aria-label="System panel">
+        <div class="panel-left">
+          <span class="workspace-pill" aria-hidden="true"></span>
+          <span class="panel-dot" aria-hidden="true"></span>
+          <span class="apps-label">Apps</span>
+          <span class="system-readout">
+            <svg viewBox="0 0 18 18" aria-hidden="true">
+              <path d="M5 2.5v3M9 2.5v3M13 2.5v3M5 12.5v3M9 12.5v3M13 12.5v3M2.5 6h13v6h-13z" />
+            </svg>
+            <span>41%</span>
+          </span>
+          <span class="system-readout">
+            <svg viewBox="0 0 18 18" aria-hidden="true">
+              <path d="M9 12.5V4m0 0L6 7m3-3 3 3M3 12v2.5h12V12M4.5 15.5h9" />
+            </svg>
+            <span>1 KB/s</span>
+          </span>
+          <span class="system-readout transfer-readout">
+            <svg viewBox="0 0 18 18" aria-hidden="true">
+              <path d="M2.5 3.5h13v9h-13zM6 15.5h6M9 12.5v3" />
+            </svg>
+            <span>53%</span>
+          </span>
+        </div>
+
+        <time class="panel-clock" datetime="2026-10-24T16:00">Oct 24&nbsp;&nbsp;4:00 PM</time>
+
+        <div class="panel-right" aria-label="System status">
+          <svg viewBox="0 0 18 18" aria-label="Clipboard">
+            <path d="M6 3.5h6M7 2h4v3H7zM4 4.5h2M12 4.5h2v11H4v-11h2M6.5 8h5M6.5 10.5h5M6.5 13h3" />
+          </svg>
+          <svg viewBox="0 0 18 18" aria-label="GitHub">
+            <path d="M9 2.2a6.8 6.8 0 0 0-2.15 13.25c.34.06.46-.15.46-.33v-1.2c-1.89.41-2.29-.8-2.29-.8-.31-.78-.76-.99-.76-.99-.62-.43.05-.42.05-.42.68.05 1.04.69 1.04.69.61 1.04 1.61.74 2 .57.06-.45.24-.74.44-.91-1.51-.17-3.1-.76-3.1-3.36 0-.74.26-1.34.69-1.81-.07-.17-.3-.86.07-1.79 0 0 .57-.18 1.87.69a6.5 6.5 0 0 1 3.4 0c1.3-.87 1.87-.69 1.87-.69.37.93.14 1.62.07 1.79.43.47.69 1.07.69 1.81 0 2.61-1.6 3.19-3.12 3.36.25.22.47.63.47 1.27v1.79c0 .18.12.4.47.33A6.8 6.8 0 0 0 9 2.2z" />
+          </svg>
+          <svg viewBox="0 0 18 18" aria-label="Open application">
+            <path d="M3 2.5h8v2H5v9h8v-3h2v5H3zM9 3h6v6h-2V6.4l-4.7 4.7-1.4-1.4L11.6 5H9z" />
+          </svg>
+          <svg viewBox="0 0 18 18" aria-label="Extensions">
+            <path d="M6 2.5h2v3h2v3h4v-3h2v10H2v-10h2v3h2v-3h2v-3z" />
+          </svg>
+          <span class="input-language">en</span>
+          <span class="quick-status">
+            <svg viewBox="0 0 18 18" aria-label="Network">
+              <path d="M2 6.5a10 10 0 0 1 14 0L9 15zM6 9l3 3 3-3" />
+            </svg>
+            <svg viewBox="0 0 18 18" aria-label="Sound">
+              <path d="M3 7h3l4-3v10l-4-3H3zM13 6a4.5 4.5 0 0 1 0 6m1.5-8a7 7 0 0 1 0 10" />
+            </svg>
+            <span class="battery" aria-label="Battery charging">
+              <svg viewBox="0 0 18 18" aria-hidden="true">
+                <path d="M2 5h12v9H2zM14 7h2v5h-2z" />
+                <path class="battery-bolt" d="m8 6.5-2 3h2l-1 3 3-4H8z" />
+              </svg>
+            </span>
+          </span>
+        </div>
+      </header>
+
+      <nav class="desktop-dock" aria-label="Desktop applications">
+        <span class="dock-item" aria-label="Files" title="Files">
+          <svg viewBox="0 0 40 40" aria-hidden="true">
+            <path d="M5 11a3 3 0 0 1 3-3h9l4 4h11a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3z" fill="#e8b85b" />
+            <path d="M5 17h30l-3 12a3 3 0 0 1-3 2H8a3 3 0 0 1-3-3z" fill="#f2d18a" />
+          </svg>
+        </span>
+        <span class="dock-item dock-item-active" id="chrome-dock-item" aria-label="Google Chrome" title="Google Chrome">
+          <span class="chrome-mark" aria-hidden="true"><span></span></span>
+          <span class="dock-running-indicator" aria-hidden="true"></span>
+        </span>
+        <span class="dock-item" aria-label="Terminal" title="Terminal">
+          <svg viewBox="0 0 40 40" aria-hidden="true">
+            <rect x="4" y="6" width="32" height="28" rx="6" fill="#343a42" />
+            <path d="m11 15 5 5-5 5m9 0h8" fill="none" stroke="#d9dedf" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" />
+          </svg>
+        </span>
+        <span class="dock-divider" aria-hidden="true"></span>
+        <span class="dock-item" aria-label="Trash" title="Trash">
+          <svg viewBox="0 0 40 40" aria-hidden="true">
+            <path d="M11 13h18l-1.5 20h-15zM9 9h22v3H9zm7-3h8v3h-8z" fill="#bcc2c7" />
+            <path d="M17 17v11m6-11v11" stroke="#687079" stroke-linecap="round" stroke-width="1.5" />
+          </svg>
+        </span>
+      </nav>
+
+      <section
+        class="chat-window"
+        id="chat-window"
+        aria-label="Ember conversation preview"
+        tabindex="-1"
+        hidden
+      >
+        <header class="chat-header">
+          <div class="chat-identity">
+            <span class="chat-avatar" aria-hidden="true">
+              <svg viewBox="0 0 28 28">
+                <path d="M8 3h12v4h4v14h-4v4H8v-4H4V7h4z" />
+                <path class="chat-avatar-eye" d="M9 12h3v4H9zm7 0h3v4h-3z" />
+              </svg>
+            </span>
+            <div class="chat-heading">
+              <h1 id="chat-title">Ember</h1>
+              <p id="chat-subtitle">Here whenever you need a hand</p>
+            </div>
+          </div>
+          <div class="chat-header-actions">
+            <span
+              class="chat-online"
+              id="chat-online"
+              role="status"
+              aria-label="Ember is available"
+            ><span class="chat-online-dot" aria-hidden="true"></span><span id="chat-online-label">Available</span></span>
+            <button
+              class="chat-close"
+              id="chat-close"
+              type="button"
+              aria-label="Close conversation"
+              title="Close conversation"
+            >
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m5 5 10 10M15 5 5 15" />
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        <div class="chat-preview-note" role="note">
+          <span class="chat-preview-indicator" aria-hidden="true"></span>
+          <span id="chat-preview-label">Preview replies only · Gemini is not connected</span>
+        </div>
+
+        <div
+          class="chat-thread"
+          id="chat-thread"
+          aria-label="Conversation"
+          aria-live="polite"
+          aria-relevant="additions"
+        >
+          <p class="chat-date" id="chat-date">Today</p>
+          <article class="chat-message chat-message-user">
+            <p class="chat-sender" id="chat-user-label">You</p>
+            <p class="chat-bubble" id="chat-user-message" dir="auto">How do you help me focus?</p>
+          </article>
+          <article class="chat-message chat-message-ember">
+            <p class="chat-sender" id="chat-ember-label">Ember · sample reply</p>
+            <p class="chat-bubble" id="chat-ember-reply" dir="auto">
+              This sample shows how a reply will look. Gemini is not connected in this preview.
+            </p>
+          </article>
+        </div>
+        <form class="chat-composer" id="chat-form">
+          <label class="chat-input-label" for="chat-input" id="chat-input-label">Write a message to Ember</label>
+          <div class="chat-input-row">
+            <textarea
+              class="chat-input"
+              id="chat-input"
+              rows="1"
+              maxlength="1200"
+              placeholder="Ask Ember anything…"
+              aria-describedby="chat-composer-hint chat-status"
+            ></textarea>
+            <button
+              class="chat-send"
+              id="chat-send"
+              type="submit"
+              aria-label="Send message"
+              title="Send message"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 11.5 20 4l-4.5 16-3.1-6.4L4 11.5Zm8.4 2.1L20 4" />
+              </svg>
+            </button>
+          </div>
+          <div class="chat-composer-footer">
+            <p class="chat-composer-hint" id="chat-composer-hint">Enter to send · Shift+Enter for a new line</p>
+            <p class="chat-status" id="chat-status" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+      </section>
+      <section
+        class="browser-preview"
+        id="browser-preview"
+        aria-label="Chrome website preview"
+        aria-live="off"
+        hidden
+      >
+        <header class="browser-titlebar">
+          <div class="browser-tab" id="browser-tab">
+            <span class="browser-tab-icon" aria-hidden="true"></span>
+            <span class="browser-tab-title">Search preview</span>
+            <span class="browser-tab-close" aria-hidden="true">
+              <svg viewBox="0 0 16 16"><path d="m4 4 8 8m0-8-8 8" /></svg>
+            </span>
+          </div>
+          <button
+            class="browser-window-close"
+            id="browser-close"
+            type="button"
+            aria-label="Close website preview"
+            title="Close preview"
+          >
+            <svg viewBox="0 0 18 18" aria-hidden="true">
+              <path d="m5 5 8 8m0-8-8 8" />
+            </svg>
+          </button>
+        </header>
+        <div class="browser-toolbar">
+          <div class="browser-nav-icons" aria-hidden="true">
+            <svg viewBox="0 0 18 18"><path d="m11 4-5 5 5 5" /></svg>
+            <svg viewBox="0 0 18 18"><path d="m7 4 5 5-5 5" /></svg>
+            <svg viewBox="0 0 18 18"><path d="M14.5 8a5.5 5.5 0 1 0 .2 2M14.5 4.5V8H11" /></svg>
+          </div>
+          <div class="browser-address">
+            <svg viewBox="0 0 18 18" aria-hidden="true">
+              <circle cx="9" cy="9" r="6.2" />
+              <path d="M2.9 9h12.2M9 2.8a10 10 0 0 1 0 12.4M9 2.8a10 10 0 0 0 0 12.4" />
+            </svg>
+            <span id="browser-address-text">google.com/search</span>
+          </div>
+          <span class="browser-profile" aria-hidden="true">A</span>
+        </div>
+        <div class="browser-content" id="browser-content">
+          <div class="browser-preview-banner">
+            <span class="browser-preview-dot" aria-hidden="true"></span>
+            <span id="browser-preview-status">Animation preview · nothing is sent to a website</span>
+          </div>
+          <div class="search-page">
+            <div class="search-brand" aria-label="Search preview">
+              <span class="search-brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 32 32">
+                  <circle cx="14" cy="14" r="8.5" />
+                  <path d="m20.5 20.5 7 7" />
+                  <path class="search-brand-spark" d="m23 3 1.2 3.8L28 8l-3.8 1.2L23 13l-1.2-3.8L18 8l3.8-1.2z" />
+                </svg>
+              </span>
+              <span>Search</span>
+            </div>
+            <label class="browser-search-box" for="browser-query">
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="8.5" cy="8.5" r="5.5" />
+                <path d="m12.5 12.5 4 4" />
+              </svg>
+              <input id="browser-query" aria-label="Search preview query" readonly value="" />
+              <span class="typing-caret" id="typing-caret" aria-hidden="true"></span>
+              <span class="search-submit-icon" aria-hidden="true">
+                <svg viewBox="0 0 20 20"><path d="M4 10h11m-4-4 4 4-4 4" /></svg>
+              </span>
+            </label>
+            <div class="search-results" id="search-results" hidden>
+              <p class="search-results-count" id="search-results-count">Preview results</p>
+              <article class="search-result">
+                <span class="search-result-source">Ember · interactive preview</span>
+                <h2 id="search-result-title">Your search will appear here</h2>
+                <p id="search-result-description">This browser scene demonstrates Ember carrying out a search request. It doesn't load an external website or claim live results.</p>
+              </article>
+              <div class="search-result-placeholder" aria-hidden="true">
+                <span></span><span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div
+        class="desktop-ember"
+        id="desktop-ember"
+        role="button"
+        tabindex="0"
+        aria-haspopup="dialog"
+        aria-label="Ember, your desktop companion. Right-click to ask a question."
+      >
+        <svg class="desktop-ember-art" viewBox="0 0 380 250" aria-hidden="true">
+          <g class="desktop-ember-shadow">
+            <rect x="122" y="207" width="136" height="7" />
+            <rect x="132" y="204" width="116" height="3" />
+          </g>
+          <g class="desktop-ember-body">
+            <g class="desktop-ember-legs">
+              <rect x="134" y="182" width="16" height="32" />
+              <rect x="166" y="182" width="16" height="32" />
+              <rect x="198" y="182" width="16" height="32" />
+              <rect x="230" y="182" width="16" height="32" />
+            </g>
+            <g class="desktop-ember-arms">
+              <rect x="104" y="130" width="28" height="22" />
+              <rect x="248" y="130" width="28" height="22" />
+            </g>
+            <rect class="desktop-ember-torso" x="130" y="100" width="120" height="86" />
+            <g class="desktop-ember-eyes" id="desktop-ember-eyes">
+              <g class="desktop-ember-eye-shapes">
+                <rect x="155" y="142" width="14" height="28" />
+                <rect x="211" y="142" width="14" height="28" />
+              </g>
+            </g>
+          </g>
+        </svg>
+        <svg class="ember-laptop" id="ember-laptop" viewBox="0 0 76 54" aria-hidden="true">
+          <path class="laptop-screen-frame" d="M14 5h47a4 4 0 0 1 4 4v31H10V9a4 4 0 0 1 4-4Z" />
+          <path class="laptop-screen" d="M15 10h45v25H15z" />
+          <path class="laptop-screen-glint" d="M19 14h14v2H19zM19 19h27v2H19zM19 24h21v2H19z" />
+          <path class="laptop-base" d="M7 40h61l5 6a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3z" />
+          <path class="laptop-trackpad" d="M31 42h13v2H31z" />
+        </svg>
+        <div class="ember-sleep-decor" aria-hidden="true">
+          <span class="ember-sleep-zzz">Zzzzz</span>
+        </div>
+      </div>
+
+      <section class="ask-bubble" id="ask-bubble" role="dialog" aria-labelledby="ask-title" hidden>
+        <form class="ask-form" id="ask-form">
+          <label class="ask-title" id="ask-title" for="ask-question">Ask Ember</label>
+          <textarea
+            class="ask-question"
+            id="ask-question"
+            rows="2"
+            maxlength="1200"
+            placeholder="Type a question for Ember…"
+            aria-label="Type a question for Ember"
+          ></textarea>
+          <div class="voice-meter" id="voice-meter" role="status" aria-label="Recording audio" hidden>
+            <span class="voice-meter-bars" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+              <i></i><i></i><i></i>
+            </span>
+          </div>
+          <div class="ask-actions">
+            <button class="ask-send" type="submit" aria-label="Send question" title="Send question">
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M5 5h10v10H5zM2 8h3v4H2zM15 8h3v4h-3zM7 15h2v3H7zM11 15h2v3h-2z" />
+                <path class="ask-send-eyes" d="M7 8h2v4H7zM11 8h2v4h-2z" />
+              </svg>
+            </button>
+          </div>
+          <p class="ask-status" id="ask-status" role="status" aria-live="polite"></p>
+        </form>
+        <i class="ask-tail" aria-hidden="true"></i>
+      </section>
+    </main>
+  </body>
+</html>
